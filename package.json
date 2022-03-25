@@ -1,0 +1,38 @@
+{
+	"name": "express-better-responsive-images",
+	"version": "1.0.0",
+	"description": "Server-side scaling and caching of images on-the-fly for Express on Node.js. Adjusting images to client's screen size or scaling by query parameters (e.g. ?w=200). Mobile friendly, reduces bandwidth and saves loading time.",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ServOKio/express-better-responsive-images.git"
+	},
+	"keywords": [
+		"responsive",
+		"images",
+		"server-side",
+		"adaptive",
+		"cached",
+		"on-the-fly",
+		"node.js",
+		"express",
+		"connect",
+		"middleware",
+		"webp",
+		"jpg",
+		"jpeg",
+		"gif",
+		"png"
+	],
+	"author": "ServOKio <servokio@mail.ru> (http://servokio.ru)",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/ServOKio/express-better-responsive-images/issues"
+	},
+	"dependencies": {
+		"sharp": "^0.30.3"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	}
+}
