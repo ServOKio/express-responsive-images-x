@@ -23,6 +23,7 @@ Mobile friendly, reduces bandwidth and saves loading time.
 - define supported file types
 - cache is updated when image is modified
 - debug mode: see process step-by-step in console
+
 **New features**
 - support custom builded libvips (animated images)
 - possibility of ignoring the presence of cookies with subsequent resizing
