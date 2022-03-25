@@ -81,8 +81,8 @@ app.use(responsiveImages({
     directScaling:      false,
     directScalingParam: 'w',
     directScaleSizes:   [],
-    convetableFileTypes: [],
-    convetableParam: 'as',
+    convertableFileTypes: [],
+    convertableParam: 'as',
     customLibvips: false,
     saveWithMetadata: true,
     ignoreCookieErrorMethod: 0,
@@ -270,14 +270,14 @@ ignoreCookieErrorMethod: 0
 Array of supported file types for convertations. If the array is empty direct conversion will be disabled.
 
 ````javascript
-convetableFileTypes: ['webp', 'jpg', 'jpeg']
+convertableFileTypes: ['webp', 'jpg', 'jpeg']
 ````
 
 ### convetableParam (string)  
-The query parameter in the url for `convetableFileTypes`.
+The query parameter in the url for `convertableFileTypes`.
 
 ````javascript
-convetableParam: 'as'
+convertableParam: 'as'
 ````
 
 ## example scenarios
@@ -300,7 +300,7 @@ You need the image in 200px, regardless of the client's device width. You can ge
 
 ### №2
 
-You want to optimize your website using Google's new webp format, but some browsers still don't support this format. You can use direct conversion! Just specify which files can be converted in `convetableFileTypes` parameter and do something like this:
+You want to optimize your website using Google's new webp format, but some browsers still don't support this format. You can use direct conversion! Just specify which files can be converted in `convertableFileTypes` parameter and do something like this:
 ```html
 <picture>
    <source srcset="https://mysite.com/assets/img/image.png?as=webp" type="image/webp"/>
