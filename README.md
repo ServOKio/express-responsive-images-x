@@ -27,6 +27,7 @@ Mobile friendly, reduces bandwidth and saves loading time.
 **New features**
 - support custom builded libvips (animated images)
 - possibility of ignoring the presence of cookies with subsequent resizing
+- dynamic image format
 
 ## install
 
@@ -80,7 +81,12 @@ app.use(responsiveImages({
     directScaling:      false,
     directScalingParam: 'w',
     directScaleSizes:   [],
-    debug:              false,
+    convetableFileTypes: [],
+    convetableParam: 'as',
+    customLibvips: false,
+    saveWithMetadata: true,
+    ignoreCookieErrorMethod: 0,
+    debug: false
 }));
 ````
 
@@ -260,16 +266,23 @@ saveWithMetadata: true
 ignoreCookieErrorMethod: 0
 ````
 
-Enable this option to log errors and events on the console.
-  
-For example:
+### convetableFileTypes (array)  
+Array of supported file types for convertations. If the array is empty direct conversion will be disabled.
 
-- Error messages like `cookie not set` or `failed to create caching directory`. 
-- Event messages like `file created`, `file already exist in cache` or `the calculated image size is ...`. 
-  
-Turn off in production mode.
+````javascript
+convetableFileTypes: ['webp', 'jpg', 'jpeg']
+````
+
+### convetableParam (string)  
+The query parameter in the url for `convetableFileTypes`.
+
+````javascript
+convetableParam: 'as'
+````
 
 ## example scenarios
+
+### №1
 
 A (large) image as source: `/public/images/desktop.jpg` (1920x1080px).
 
@@ -284,6 +297,17 @@ The image is scaled down to 480px (320 x 1.5) and cached in `/public/images-cach
   
 Scenario direct scaling:  
 You need the image in 200px, regardless of the client's device width. You can get it with `/public/images/desktop.jpg?w=200`. See the `directScaling` and `directScaleSizes` options to enable this feature. This is useful to fill `srcset` with multiple image sizes.
+
+### №2
+
+You want to optimize your website using Google's new webp format, but some browsers still don't support this format. You can use direct conversion! Just specify which files can be converted in `convetableFileTypes` parameter and do something like this:
+```html
+<picture>
+   <source srcset="https://mysite.com/assets/img/image.png?as=webp" type="image/webp"/>
+   <img src="https://mysite.com/assets/img/image.png" alt="my awesome art"/>
+</picture>
+```
+`picture` tag can help you. If the format specified in the source (`type`) is not supported it will be skipped to `src` in original `img`
 
 ## Strategies and optimizations
 The way the cookie is set affects the behavior of the module.
