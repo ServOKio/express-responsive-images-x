@@ -48,8 +48,8 @@ module.exports = (opts = {}) => {
         directScaling: false,
         directScalingParam: 'w',
         directScaleSizes: [],
-        convetableFileTypes: [],
-        convetableParam: 'as',
+        convertableFileTypes: [],
+        convertableParam: 'as',
         customLibvips: false,
         saveWithMetadata: true,
         ignoreCookieErrorMethod: 0,
@@ -68,7 +68,7 @@ module.exports = (opts = {}) => {
         const
             requestFileName = requestUrl.split('/').pop().replace(/\.[^/.]+$/, ""), // e.g. image
             requestQueryW = parseInt(urlObj.searchParams.get(options.directScalingParam)) || 0, //e.g. 64 for example
-            requestQueryAs = urlObj.searchParams.get(options.convetableParam)?.toLowerCase() || null;
+            requestQueryAs = urlObj.searchParams.get(options.convertableParam)?.toLowerCase() || null;
 
         debug('info', `${req.url} --------------------------------------`);
 
@@ -263,7 +263,7 @@ module.exports = (opts = {}) => {
                 }
             }
 
-            if (requestQueryAs !== null && reqFileType !== requestQueryAs && options.convetableFileTypes.includes(requestQueryAs)) {
+            if (requestQueryAs !== null && reqFileType !== requestQueryAs && options.convertableFileTypes.includes(requestQueryAs)) {
                 fileTypeConversion = true
                 // set new filetype
                 newFileType = `.${requestQueryAs}`;
