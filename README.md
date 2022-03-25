@@ -1,4 +1,4 @@
-# express-responsive-images
+# express-better-responsive-images
 
 Original creator: [@ztomm](https://github.com/ztomm) ♥️
 
