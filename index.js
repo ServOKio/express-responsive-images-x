@@ -9,7 +9,7 @@
  * express-better-responsive-images
  * Copyright(c) 2022 ServOKio
  * MIT Licensed
- * https://github.com/ServOKio/express-better-responsive-images
+ * https://github.com/servokio/express-better-responsive-images
  */
 
 'use strict'
@@ -36,7 +36,6 @@ const moduleName = 'express-better-responsive-images';
  */
 
 module.exports = (opts = {}) => {
-	// docs on https://github.com/ServOKio/express-better-responsive-images
     const options = {
         staticDir: '',
         watchedDirectories: ['/images'],
@@ -49,6 +48,8 @@ module.exports = (opts = {}) => {
         directScaling: false,
         directScalingParam: 'w',
         directScaleSizes: [],
+        convetableFileTypes: [],
+        convetableParam: 'as',
         customLibvips: false,
         saveWithMetadata: true,
         ignoreCookieErrorMethod: 0,
@@ -59,13 +60,15 @@ module.exports = (opts = {}) => {
     const debug = (level, message) => options.debug && console.log(`\x1b[90m[\x1b[37m${moduleName}\x1b[90m] \x1b[90m[\x1b[37m${level === 'error' ? '\x1b[91mERROR' : level === 'warn' ? '\x1b[93mWARN' : '\x1b[94mINFO'}\x1b[90m] \x1b[37m${message}`);
 
     return (req, res, next) => {
+
         // declare requested url parts
         const urlObj = new URL('http://localhost:80' + req.url);
         const requestUrl = urlObj.pathname;               // e.g. /media/subdir/image.jpg
         const requestPath = path.dirname(requestUrl);     // e.g. /media/subdir
         const
             requestFileName = requestUrl.split('/').pop().replace(/\.[^/.]+$/, ""), // e.g. image
-            requestQueryW = parseInt(urlObj.searchParams.get(options.directScalingParam)) || 0; //e.g. 64 for example
+            requestQueryW = parseInt(urlObj.searchParams.get(options.directScalingParam)) || 0, //e.g. 64 for example
+            requestQueryAs = urlObj.searchParams.get(options.convetableParam)?.toLowerCase() || null;
 
         debug('info', `${req.url} --------------------------------------`);
 
@@ -109,7 +112,7 @@ module.exports = (opts = {}) => {
             imageMetadata = {},
             image = null;
 
-        // Is filetype supported ?
+        // is filetype supported ?
         options.fileTypes = options.fileTypes.map(x => x.toLowerCase());
         if (options.fileTypes.includes(reqFileType.toLowerCase())) {
             debug('info', `(${requestFileName}) filetype is supported: ${reqFileType}`);
@@ -118,28 +121,27 @@ module.exports = (opts = {}) => {
             return next();
         }
 
-        // Does origin image exists ?
+        //Does origin image exists ?
         if (!fs.existsSync(originFilePath)) {
             debug('warn', `(${requestFileName}) origin image does not exists`);
             return next();
         }
 
-        // Change requested url and return
+        //Change requested url and return
         const sendCachedFile = _ => {
             req.url = newFilePath;
             debug('info', `(${requestFileName}) requested url updated to ${req.url}`);
             return next();
         }
 
-        // Create scaled image
+        //Create scaled image
         const createCacheFile = _ => {
             // create directory if needed
             try {
                 if (!fs.existsSync(cacheDirPath)) fs.mkdirSync(cacheDirPath, { recursive: true });
-                // Check if animated
+                //Check if animated
                 if (options.customLibvips && imageMetadata.pages > 0) image = sharp(originFilePath, { animated: true });
                 image.resize(cacheFileWidth);
-				// Saving with metadata or not
                 (options.saveWithMetadata ? image.withMetadata() : image).toFile(cacheFilePath, (err, info) => {
                     if (err) {
                         debug('error', `(${requestFileName}) sharp faild to create file: ${err.message}`);
@@ -164,7 +166,8 @@ module.exports = (opts = {}) => {
                     fs.unlinkSync(cacheFilePath);
                     // create it again, send it
                     return createCacheFile();
-                } else {
+                }
+                else {
                     // cached image exists, send it
                     debug('info', `(${requestFileName}) requested image is in cache: ${cacheFilePath}`);
                     return sendCachedFile();
@@ -175,7 +178,7 @@ module.exports = (opts = {}) => {
             return createCacheFile();
         }
 
-        // now let's check the file
+        // now let's check file
         sharp.cache(false);
         image = sharp(originFilePath);
         image.metadata((err, meta) => {
@@ -191,6 +194,7 @@ module.exports = (opts = {}) => {
             if (req.headers.cookie) {
                 const cookies = req.headers.cookie + ';'
                 deviceParameters = cookies.match(new RegExp(`(^|;| )${options.cookieName}=([^,]+),([^;]+)`)) || []
+                // deviceParameters[2] = density, deviceParameters[3] = width
                 if (!deviceParameters.length) {
                     debug('warn', `(${requestFileName}) cookies sent but module cookie not found`);
                     cookieError = true;
@@ -210,7 +214,6 @@ module.exports = (opts = {}) => {
                 } else debug('warn', `(${requestFileName}) ${requestQueryW > 0 ? 'no cookies was found and ignore method is disabled' : 'no cookies was found and the requesting width is not specified'}`);
             }
 
-			// checking parameters and set new size
             if (deviceParameters.length) {
                 // calculate new image width
                 newImageWidth = Math.round(deviceParameters[2] * deviceParameters[3]);
@@ -258,6 +261,13 @@ module.exports = (opts = {}) => {
                     newFileType = `.${options.fileTypeConversion}`;
                     debug('info', `(${requestFileName}) new filetype will be: ${newFileType}`);
                 }
+            }
+
+            if (requestQueryAs !== null && reqFileType !== requestQueryAs && options.convetableFileTypes.includes(requestQueryAs)) {
+                fileTypeConversion = true
+                // set new filetype
+                newFileType = `.${requestQueryAs}`;
+                debug('info', `(${requestFileName}) new filetype will be: ${requestQueryAs}`);
             }
 
             // return if image is smaller than newImageWidth
