@@ -77,7 +77,7 @@ module.exports = (opts = {}) => {
 
         // ls requested path in list of watching directories ?
         let validPath = false
-        for (const dir of options.watchedDirectories) {
+        for (let dir of options.watchedDirectories) {
             // wildcards in pattern
             if (dir.includes('*')) dir = dir.replace(/\*/g, '[^/].*');
             if (new RegExp('^' + dir + '$').test(requestPath)) {
