@@ -250,13 +250,6 @@ Include all metadata (EXIF, XMP, IPTC) from the input image in the output image.
 saveWithMetadata: true
 ````
 
-### saveWithMetadata (boolean)  
-Include all metadata (EXIF, XMP, IPTC) from the input image in the output image.
-
-````javascript
-saveWithMetadata: true
-````
-
 ### ignoreCookieErrorMethod (number)
 **0** - return original image if no cookies are found
 
