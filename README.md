@@ -1,4 +1,4 @@
-# express-better-responsive-images
+# express-responsive-images-x
 
 Original creator: [@ztomm](https://github.com/ztomm) ♥️
 
@@ -8,9 +8,9 @@ Images are resized to fit client's screen size or scaled by query parameters.
 
 Mobile friendly, reduces bandwidth and saves loading time.
 
-[express-better-responsive-images on npmjs.org](https://www.npmjs.com/package/express-better-responsive-images)
+[express-responsive-images-x on npmjs.org](https://www.npmjs.com/package/express-responsive-images-x)
 
-![express-responsive-images](https://raw.githubusercontent.com/ServOKio/express-better-responsive-images/master/express-responsive-images.png)
+![express-responsive-images](https://raw.githubusercontent.com/ServOKio/express-responsive-images-x/master/express-responsive-images.png)
 
 **Scaling**
 - by breakpoint (default)
@@ -32,7 +32,7 @@ Mobile friendly, reduces bandwidth and saves loading time.
 ## install
 
 ````bash
-npm i express-better-responsive-images --save
+npm i express-responsive-images-x --save
 ````
 
 ## usage
@@ -49,7 +49,7 @@ npm i express-better-responsive-images --save
 **backend**
 
 ````javascript
-const responsiveImages = require('express-better-responsive-images');
+const responsiveImages = require('express-responsive-images-x');
 
 // use it before declaring static routes
 app.use(responsiveImages({
