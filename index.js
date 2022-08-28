@@ -6,10 +6,10 @@
  */
 
 /*!
- * express-better-responsive-images
+ * express-responsive-images-x
  * Copyright(c) 2022 ServOKio
  * MIT Licensed
- * https://github.com/servokio/express-better-responsive-images
+ * https://github.com/servokio/express-responsive-images-x
  */
 
 'use strict'
@@ -29,7 +29,7 @@ const
  * @private
  */
 
-const moduleName = 'express-better-responsive-images';
+const moduleName = 'express-responsive-images-x';
 
 /**
  * Module
@@ -48,8 +48,8 @@ module.exports = (opts = {}) => {
         directScaling: false,
         directScalingParam: 'w',
         directScaleSizes: [],
-        convertableFileTypes: [],
-        convertableParam: 'as',
+        convetableFileTypes: [],
+        convetableParam: 'as',
         customLibvips: false,
         saveWithMetadata: true,
         ignoreCookieErrorMethod: 0,
@@ -68,7 +68,7 @@ module.exports = (opts = {}) => {
         const
             requestFileName = requestUrl.split('/').pop().replace(/\.[^/.]+$/, ""), // e.g. image
             requestQueryW = parseInt(urlObj.searchParams.get(options.directScalingParam)) || 0, //e.g. 64 for example
-            requestQueryAs = urlObj.searchParams.get(options.convertableParam)?.toLowerCase() || null;
+            requestQueryAs = urlObj.searchParams.get(options.convetableParam)?.toLowerCase() || null;
 
         debug('info', `${req.url} --------------------------------------`);
 
@@ -263,7 +263,7 @@ module.exports = (opts = {}) => {
                 }
             }
 
-            if (requestQueryAs !== null && reqFileType !== requestQueryAs && options.convertableFileTypes.includes(requestQueryAs)) {
+            if (requestQueryAs !== null && reqFileType !== requestQueryAs && options.convetableFileTypes.includes(requestQueryAs)) {
                 fileTypeConversion = true
                 // set new filetype
                 newFileType = `.${requestQueryAs}`;
